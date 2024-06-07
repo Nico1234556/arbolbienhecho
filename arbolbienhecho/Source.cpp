@@ -1,69 +1,56 @@
-#include "ArbolB.h"
-#include <stdlib.h>
-#include <time.h>
 #include <iostream>
-#include <conio.h>
-#include <string>
-using namespace std;
- 
-void imprimir(int e) {
-	cout << " " << e;
+#include "Arbol.h"
+#include "Arbolb.h"
+#include "Sorting.hpp"
+
+void procesarNodo(const Arbol& arbol) {
+    cout << arbol.Edad << " (" << arbol.Especie << ")" << std::endl;
+}
+
+void mostrarElementos(const vector<Arbol>& elementos) {
+    for (const auto& arbol : elementos) {
+        procesarNodo(arbol);
+    }
 }
 
 int main() {
-	//srand(time(0));
-	ArbolB<int>* arbol = new ArbolB<int>(imprimir);
-	/*
-	for (int i = 0; i < 30; ++i) {
-		arbol->insertar(rand() % 100);
-	}*/
+    ArbolB<Arbol> arbolBinario(procesarNodo);
+    Sorting<Arbol> sorter;
 
+    Arbol arbol1(1, "Pino", 10.5, 30.0, 5, 80);
+    Arbol arbol2(2, "Roble", 15.0, 40.0, 10, 90);
+    Arbol arbol3(3, "Cedro", 8.0, 25.0, 3, 70);
 
-	// Arbol Binario de PPT
-	arbol->insertar(15);
-	arbol->insertar(9);
-	arbol->insertar(20);
-	arbol->insertar(6);
-	arbol->insertar(14);
-	arbol->insertar(17);
-	arbol->insertar(64);
-	arbol->insertar(13);
-	arbol->insertar(26);
-	arbol->insertar(72);
+    arbolBinario.insertar(arbol1);
+    arbolBinario.insertar(arbol2);
+    arbolBinario.insertar(arbol3);
 
-	cout << "EnOrden";
-	arbol->enOrden();
-	cout << endl;
+    int opcion;
+    std::cout << "Seleccione el método de ordenamiento:\n";
+    std::cout << "1. QuickSort\n";
+    std::cout << "2. MergeSort\n";
+    std::cout << "3. HeapSort\n";
+    std::cin >> opcion;
 
-	cout << "PreOrden";
-	arbol->preOrden();
-	cout << endl;
+    switch (opcion) {
+    case 1:
+        sorter.quicksort(arbolBinario, [](const Arbol& a, const Arbol& b) { return a < b; });
+        break;
+    case 2:
+        sorter.mergesort(arbolBinario, [](const Arbol& a, const Arbol& b) { return a < b; });
+        break;
+    case 3:
+        sorter.heapsort(arbolBinario, [](const Arbol& a, const Arbol& b) { return a < b; });
+        break;
+    default:
+        std::cout << "Opción no válida" << std::endl;
+        return 1;
+    }
 
-	cout << "PostOrden";
-	arbol->postOrden();
-	cout << endl;
+    cout << "Elementos ordenados:" << std::endl;
+    arbolBinario.enOrden();
+   
+    cin.get();
 
-	cout << "Altura: " << arbol->altura() << endl;
-	cout << "Cantidad: " << arbol->cantidad() << endl;
-
-	int e=8;
-	if (arbol->buscar(e) == true) cout << "\nEl elemento SI se encuentra en el arbol.\n\n";
-	else if (arbol->buscar(e) == false) cout << "\nEl elemento NO se encuentra en el arbol.\n\n";
-
-	arbol->imprimirarbol();
-
-	// =============================================================== //
-	//EJERCICIOS Planteados:
-
-	/*
-	- Implemente una función que determine cuantos nodos hay al lado izquierdo y cuantos hay al lado derecho de la raíz.
-	- Implemente  una  función  que  devuelva  la  suma  de  todos  los  números  de  un  árbol  binario de enteros.
-	- Implemente una función que permita convertir un árbol binario en su espejo.
-	- Implementar búsqueda de un elemento en un Árbol Binario.
-	*/
-
-
-	//cin.get();
-	_getch();
-	return 0;
+    return 0;
 }

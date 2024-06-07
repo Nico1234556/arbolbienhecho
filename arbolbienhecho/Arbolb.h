@@ -1,181 +1,156 @@
-#pragma once
-#pragma once
 #ifndef __ARBOLB_HPP__
 #define __ARBOLB_HPP__
 
-#include<algorithm>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include <string>
-using namespace std;
+#include "Arbol.h"
 
 template <class T>
 class Nodo {
 public:
-	T elemento;
-	Nodo* izq;
-	Nodo* der;
+    T elemento;
+    Nodo* izq;
+    Nodo* der;
+
+    Nodo(const T& elem) : elemento(elem), izq(nullptr), der(nullptr) {}
 };
 
 template <class T>
 class ArbolB {
-	Nodo<T>* raiz;
-	void(*procesar)(T); //Puntero a funcion
+    Nodo<T>* raiz;
+    void(*procesar)(const T&); // Puntero a función
 
-public: //Metodos publicos que llaman a metodos internos de la clase
-	ArbolB(void(*otroPunteroAFuncion)(T)) { //Constructor del Arbol: recibe como parametro un puntero a una funcion
-		this->procesar = otroPunteroAFuncion;
-		raiz = nullptr;
-	}
-	bool insertar(T e) {
-		return _insertar(raiz, e);
-	}
-	void enOrden() {
-		_enOrden(raiz);
-	}
-	void preOrden() {
-		_preOrden(raiz);
-	}
-	void postOrden() {
-		_postOrden(raiz);
-	}
-	int cantidad() {
-		return _cantidad(raiz);
-	}
-	int altura() {
-		return _altura(raiz);
-	}
-	bool buscar(T e) {
-		return _buscar(raiz, e);
-	}
-	void imprimirarbol()
-	{
-		_imprimirArbol(raiz, "", true);
-	}
+public:
+    ArbolB(void(*otroPunteroAFuncion)(const T&)) {
+        this->procesar = otroPunteroAFuncion;
+        raiz = nullptr;
+    }
 
-	// =============================================================== //
-	// Ejercicios Planetados
+    bool insertar(const T& e) {
+        return _insertar(raiz, e);
+    }
 
+    void enOrden() {
+        _enOrden(raiz);
+    }
 
+    void preOrden() {
+        _preOrden(raiz);
+    }
 
-private: //Metodos internos de la clase
-	//se pasa como parametro el nodo, xq se puede empezar la operación desde cualquier nodo hacia abajo, no necesariamente debe ser el nodo Raiz.
-	bool _insertar(Nodo<T>*& nodo, T e) { //Parametros: (Nodo Padre, elemento)
-		if (nodo == nullptr) { //Si no hay Nodo
-			nodo = new Nodo<T>();
-			nodo->elemento = e;
-			//OBS: Los nodos izq y der deberian estar en nullptr
-		}
-		else if (e < nodo->elemento) {
-			return _insertar(nodo->izq, e); //recursividad
-		}
-		else if (e >= nodo->elemento) {
-			return _insertar(nodo->der, e);	//recursividad
-		}
-	}
+    void postOrden() {
+        _postOrden(raiz);
+    }
 
-	void _enOrden(Nodo<T>* nodo) { //recorrido: Izq => Raiz => Der
-		if (nodo == nullptr) return;
-		_enOrden(nodo->izq);	//por ejemplo imprime Izq
-		procesar(nodo->elemento);	//por ejemplo imprime Raiz
-		_enOrden(nodo->der);	//por ejemplo imprime Der
-	}
-	void _preOrden(Nodo<T>* nodo) {	//Recorrido: Raiz => Izq => Der
-		if (nodo == nullptr) return;
-		procesar(nodo->elemento); //por ejemplo imprime Raiz
-		_preOrden(nodo->izq);	//por ejemplo imprime Izq
-		_preOrden(nodo->der);	//por ejemplo imprime Der
-	}
-	void _postOrden(Nodo<T>* nodo) { //Recorrido: Izq => Der => Raiz
-		if (nodo == nullptr) return;
-		_postOrden(nodo->izq);	//por ejemplo imprime Izq
-		_postOrden(nodo->der);	//por ejemplo imprime Der
-		procesar(nodo->elemento);	//por ejemplo imprime Raiz
-	}
+    int cantidad() {
+        return _cantidad(raiz);
+    }
 
-	bool _vacio() {
-		return raiz == nullptr;
-	}
-	int _cantidad(Nodo<T>* nodo) {
-		//La cantidad de nodos del árbol es:
-		//	0 si es vacío
-		//	1 + la cantidad de nodos por la izquierda + la cantidad de nodos por la derecha
+    int altura() {
+        return _altura(raiz);
+    }
 
-		if (nodo == nullptr)
-			return 0;
-		else
-		{
-			int ci, cd;
-			ci = _cantidad(nodo->izq);
-			cd = _cantidad(nodo->der);
-			return 1 + ci + cd;
-		}
+    bool buscar(const T& e) {
+        return _buscar(raiz, e);
+    }
 
-	}
-	int _altura(Nodo<T>* nodo) {
-		//La altura del árbol es:
-		//	0 si es vacío
-		//	la mayor de las alturas por la izquierda y por la derecha, las cuáles son 0 si son vacías ó 1 + la altura por la izq(o der) en caso contrario
+    void imprimirArbol() {
+        _imprimirArbol(raiz, "", true);
+    }
 
-		if (nodo == nullptr)
-			return 0;
-		else
-		{
-			int ai, ad;
-			///*
-			// [Opcion 1] OK:
-			ai = 1 + _altura(nodo->izq);
-			ad = 1 + _altura(nodo->der);
-			return ai > ad ? ai : ad;
-			//*/
+    // Otras declaraciones de funciones y miembros de la clase
 
-			/*
-			// [Opcion 2] OK:
-			ai = _altura(nodo->izq);
-			ad = _altura(nodo->der);
-			return 1 + max(ai, ad);
-			*/
-		}
-	}
+    // Método para limpiar el árbol (eliminar todos los nodos)
+    void limpiar()
+    {
+        _limpiar();
+    }
+    // Método para obtener todos los elementos del árbol en un vector
+    std::vector<T> obtenerElementos() {
+        std::vector<T> elementos;
+        _obtenerElementos(raiz, elementos);
+        return elementos;
+    }
+private:
+    bool _insertar(Nodo<T>*& nodo, const T& e) {
+        if (nodo == nullptr) {
+            nodo = new Nodo<T>(e);
+            return true;
+        }
+        if (e < nodo->elemento) {
+            return _insertar(nodo->izq, e);
+        }
+        else {
+            return _insertar(nodo->der, e);
+        }
+    }
 
-	//Buscar
-	bool _buscar(Nodo <T>* nodo, T e) {
-		if (nodo == nullptr) {
-			return false;
-		}
-		else if (e < nodo->elemento) {
-			return _buscar(nodo->izq, e);
-		}
-		else if (e > nodo->elemento) {
-			return _buscar(nodo->der, e);
-		}
-		else if (e == nodo->elemento) {
-			return true;
-		}
-	}
-	void _imprimirArbol(Nodo<T>* nodo, string ident, bool last)
-	{
-		if (nodo != nullptr)
-		{
-			cout << ident;
-			if (last)
-			{
-				cout << "R----";
-				ident += "   ";
-			}
-			else 
-			{
-				cout << "L----";
-				ident += "   ";
-			}
-			cout << nodo->elemento << endl;
-			_imprimirArbol(nodo ->izq, ident, false);
-			_imprimirArbol(nodo -> der, ident, true);
+    void _enOrden(Nodo<T>* nodo) {
+        if (nodo == nullptr) return;
+        _enOrden(nodo->izq);
+        procesar(nodo->elemento);
+        _enOrden(nodo->der);
+    }
 
-			}
+    void _preOrden(Nodo<T>* nodo) {
+        if (nodo == nullptr) return;
+        procesar(nodo->elemento);
+        _preOrden(nodo->izq);
+        _preOrden(nodo->der);
+    }
 
-		}
-	
+    void _postOrden(Nodo<T>* nodo) {
+        if (nodo == nullptr) return;
+        _postOrden(nodo->izq);
+        _postOrden(nodo->der);
+        procesar(nodo->elemento);
+    }
 
+    int _cantidad(Nodo<T>* nodo) {
+        if (nodo == nullptr) return 0;
+        return 1 + _cantidad(nodo->izq) + _cantidad(nodo->der);
+    }
+
+    int _altura(Nodo<T>* nodo) {
+        if (nodo == nullptr) return 0;
+        return 1 + std::max(_altura(nodo->izq), _altura(nodo->der));
+    }
+
+    bool _buscar(Nodo<T>* nodo, const T& e) {
+        if (nodo == nullptr) return false;
+        if (e < nodo->elemento) return _buscar(nodo->izq, e);
+        if (e > nodo->elemento) return _buscar(nodo->der, e);
+        return true;
+    }
+
+    void _imprimirArbol(Nodo<T>* nodo, std::string ident, bool last) {
+        if (nodo != nullptr) {
+            cout << ident;
+            if (last) {
+                std::cout << "R----";
+                ident += "   ";
+            }
+            else {
+                std::cout << "L----";
+                ident += "|  ";
+            }
+            cout << nodo->elemento.Edad << " (" << nodo->elemento.Especie << ")" << std::endl;
+            _imprimirArbol(nodo->izq, ident, false);
+            _imprimirArbol(nodo->der, ident, true);
+        }
+    }
+    void _limpiar() {
+        raiz = nullptr; // Establece la raíz del árbol como nula, lo que efectivamente elimina todos los nodos del árbol
+    }
+    // Método para obtener todos los elementos del árbol en un vector
+    void _obtenerElementos(Nodo<T>* nodo, std::vector<T>& elementos) {
+        if (nodo == nullptr) return;
+        _obtenerElementos(nodo->izq, elementos);
+        elementos.push_back(nodo->elemento);
+        _obtenerElementos(nodo->der, elementos);
+    }
 };
 
 #endif
-#pragma once
