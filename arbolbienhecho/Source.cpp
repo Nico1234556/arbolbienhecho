@@ -53,7 +53,6 @@ string generarEspecieAleatoria() {
 int generarEdadAleatoria(int min, int max) {
     return min + (rand() % (max - min + 1));
 }
-// PARA EL ARBOL BINARIO 
 
 int generarNumeroAleatorio(int min, int max) {
     return min + rand() % ((max + 1) - min);
