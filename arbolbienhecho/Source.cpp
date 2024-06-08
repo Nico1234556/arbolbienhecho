@@ -21,7 +21,9 @@ void mostrarmenu() {
     std::cout << "3. Buscar por edad  \n";
     std::cout << "4. Ordenar\n";
     std::cout << "5. Buscar por edad con búsqueda binaria\n";
-    std::cout << "6. Salir\n";
+    std::cout << "6. Verificar si el nodo mayor es múltiplo de 7\n";
+    std::cout << "7. Eliminar un nodo por edad y mostrar el árbol\n";
+    std::cout << "8. Salir\n";
 
     std::cout << "========================================\n";
     std::cout << "Seleccione una opcion: ";
@@ -43,7 +45,6 @@ void imprimirTablaHash(const HashTabla& ht, const std::vector<std::string>& keys
         }
     }
 }
-// más especies de arboles "Haya", "Ciprés", "Secuoya", "Baobab", "Teca", "Acacia", "Eucalipto", "Magnolio"
 
 string generarEspecieAleatoria() {
     const vector<string> especies = { "Sauce", "Pino", "Roble", "Arce", "Olmo", "Cedro", "Abeto", "Cerezo", "Fresno" };
@@ -118,8 +119,8 @@ int main() {
         case 1:
             system("cls");
 
-          
-            for (int i = 0; i < 500; ++i) 
+
+            for (int i = 0; i < 500; ++i)
             {
                 string especie = generarEspecieAleatoria();
                 int edad = generarEdadAleatoria(1, 100);
@@ -206,7 +207,34 @@ int main() {
             }
             break;
         }
-        case 6:
+        case 6: {
+            system("cls");
+            arbolBinario.verificarMayorMultiploDe7();
+            break;
+        }
+        case 7: {
+            system("cls");
+            int edadAEliminar;
+            cout << "Ingrese la edad del arbol que desea eliminar: ";
+            cin >> edadAEliminar;
+
+            Arbol arbolAEliminar(0, "", 0, 0, edadAEliminar, 0);
+            bool eliminado = arbolBinario.eliminar(&arbolAEliminar);
+
+            if (eliminado) {
+                cout << "El arbol con edad " << edadAEliminar << " fue eliminado del arbol binario." << endl;
+                if (edadAEliminar % 2 != 0) {
+                    cout << "El número eliminado fue impar." << endl;
+                }
+                cout << "Elementos restantes en el arbol binario: " << endl;
+                arbolBinario.enOrden();
+            }
+            else {
+                cout << "No se encontró un arbol con edad " << edadAEliminar << " en el arbol binario." << endl;
+            }
+            break;
+        }
+        case 8:
             system("cls");
             cout << "Saliendo del programa...\n";
             break;
@@ -214,7 +242,7 @@ int main() {
             cout << "Opcion no valida\n";
             break;
         }
-    } while (opcion != 6);
+    } while (opcion != 8);
 
     return 0;
 }

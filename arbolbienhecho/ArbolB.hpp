@@ -83,6 +83,27 @@ public:
         }
         return indices;
     }
+    // Añadimos esta función pública
+    void verificarMayorMultiploDe7() const {
+        if (raiz == nullptr) {
+            cout << "El árbol está vacío." << endl;
+            return;
+        }
+        Nodo<T>* mayorNodo = encontrarMayor(raiz);
+        if (mayorNodo->elemento->Edad % 7 == 0) {
+            cout << "El elemento del nodo mayor (" << mayorNodo->elemento->Edad << ") es múltiplo de 7." << endl;
+        }
+        else {
+            cout << "El elemento del nodo mayor (" << mayorNodo->elemento->Edad << ") no es múltiplo de 7." << endl;
+        }
+    }
+
+    // Añadimos esta función pública
+    bool eliminar(const T& e) {
+        bool eliminado = false;
+        raiz = _eliminar(raiz, e, eliminado);
+        return eliminado;
+    }
 
 private:
     bool _insertar(Nodo<T>*& nodo, const T& e) {
@@ -202,6 +223,41 @@ private:
             }
         }
         return result;
+    }
+    Nodo<T>* encontrarMayor(Nodo<T>* nodo) const {
+        while (nodo->der != nullptr) {
+            nodo = nodo->der;
+        }
+        return nodo;
+    }
+
+    Nodo<T>* _eliminar(Nodo<T>* nodo, const T& e, bool& eliminado) {
+        if (nodo == nullptr) return nodo;
+
+        if (*e < *(nodo->elemento)) {
+            nodo->izq = _eliminar(nodo->izq, e, eliminado);
+        }
+        else if (*e > *(nodo->elemento)) {
+            nodo->der = _eliminar(nodo->der, e, eliminado);
+        }
+        else {
+            eliminado = true;
+            if (nodo->izq == nullptr) {
+                Nodo<T>* temp = nodo->der;
+                delete nodo;
+                return temp;
+            }
+            else if (nodo->der == nullptr) {
+                Nodo<T>* temp = nodo->izq;
+                delete nodo;
+                return temp;
+            }
+
+            Nodo<T>* temp = encontrarMayor(nodo->izq);
+            nodo->elemento = temp->elemento;
+            nodo->izq = _eliminar(nodo->izq, temp->elemento, eliminado);
+        }
+        return nodo;
     }
 };
 
