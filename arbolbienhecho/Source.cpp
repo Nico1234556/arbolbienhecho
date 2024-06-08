@@ -6,13 +6,11 @@
 #include "Sorting.hpp"
 #include <vector>
 
-
 using namespace std;
 
 int generarNumeroAleatorio(int min, int max) {
     return min + rand() % ((max + 1) - min);
 }
-
 
 int generateId() {
     static int id = 1;
@@ -60,7 +58,6 @@ void mostrarmenu() {
 }
 
 int main() {
-    
     ArbolB<Arbol*> arbolBinario;
     int opcion;
     do {
@@ -70,13 +67,13 @@ int main() {
         case 1:
             generarDatosArbol(arbolBinario, 500);
             break;
-        case 2:
+        case 2: {
             int edadBuscada;
             cout << "Ingrese la edad del arbol que desea buscar: ";
             cin >> edadBuscada;
 
             Arbol arbolBusqueda(0, "", 0, 0, edadBuscada, 0);
-            bool encontrado = arbolBinario.buscar(arbolBusqueda);
+            bool encontrado = arbolBinario.buscar(&arbolBusqueda);
 
             if (encontrado) {
                 cout << "El arbol con edad " << edadBuscada << " fue encontrado en el arbol binario." << endl;
@@ -85,6 +82,7 @@ int main() {
                 cout << "El arbol con edad " << edadBuscada << " no fue encontrado en el arbol binario." << endl;
             }
             break;
+        }
         case 3:
             // Aquí puedes agregar el código para ordenar
             break;
