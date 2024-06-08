@@ -114,8 +114,8 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Arbol.h" />
     <ClInclude Include="Arbolb.h" />
+    <ClInclude Include="Objeto.h" />
     <ClInclude Include="Sorting.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
