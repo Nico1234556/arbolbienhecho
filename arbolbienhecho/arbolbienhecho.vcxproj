@@ -115,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arbolb.h" />
+    <ClInclude Include="ArbolB.hpp" />
+    <ClInclude Include="HashEntidad.hpp" />
+    <ClInclude Include="HashTabla.hpp" />
     <ClInclude Include="Objeto.h" />
     <ClInclude Include="Sorting.hpp" />
   </ItemGroup>

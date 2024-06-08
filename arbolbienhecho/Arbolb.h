@@ -1,152 +1,41 @@
-#ifndef __ARBOLB_HPP__
-#define __ARBOLB_HPP__
+#ifndef ARBOL_H
+#define ARBOL_H
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
 #include <string>
-#include "Objeto.h"
+using namespace std;
 
-template <class T>
-class Nodo {
+class Arbol {
 public:
-    T elemento;
-    Nodo* izq;
-    Nodo* der;
+    int Id;
+    string Especie;
+    float Altura;
+    float Diametro;
+    int Edad;
+    int Salud;
 
-    Nodo(const T& elem) : elemento(elem), izq(nullptr), der(nullptr) {}
-};
+    // Constructor
+    Arbol(int id, const string& especie, float altura, float diametro, int edad, int salud)
+        : Id(id), Especie(especie), Altura(altura), Diametro(diametro), Edad(edad), Salud(salud) {}
 
-template <class T>
-class ArbolB {
-    Nodo<T>* raiz;
+    Arbol(const string& especie, int edad)
+        : Especie(especie), Edad(edad) {}
 
-public:
-    ArbolB() {
-        raiz = nullptr;
+    bool operator<(const Arbol& other) const {
+        return this->Edad < other.Edad;
     }
 
-    bool insertar(const T& e) {
-        return _insertar(raiz, e);
+    bool operator==(const Arbol& other) const {
+        return this->Edad == other.Edad;
     }
 
-    void enOrden() {
-        _enOrden(raiz);
+    bool operator>(const Arbol& other) const {
+        return this->Edad > other.Edad;
     }
 
-    void preOrden() {
-        _preOrden(raiz);
-    }
-
-    void postOrden() {
-        _postOrden(raiz);
-    }
-
-    int cantidad() {
-        return _cantidad(raiz);
-    }
-
-    int altura() {
-        return _altura(raiz);
-    }
-
-    bool buscar(const T& e) {
-        return _buscar(raiz, e);
-    }
-
-    void imprimirArbol() {
-        _imprimirArbol(raiz, "", true);
-    }
-
-    void limpiar() {
-        _limpiar();
-    }
-
-    std::vector<T> obtenerElementos() {
-        std::vector<T> elementos;
-        _obtenerElementos(raiz, elementos);
-        return elementos;
-    }
-
-private:
-    bool _insertar(Nodo<T>*& nodo, const T& e) {
-        if (nodo == nullptr) {
-            nodo = new Nodo<T>(e);
-            return true;
-        }
-        if (*e < *(nodo->elemento)) {
-            return _insertar(nodo->izq, e);
-        }
-        else {
-            return _insertar(nodo->der, e);
-        }
-    }
-
-    void _enOrden(Nodo<T>* nodo) {
-        if (nodo == nullptr) return;
-        _enOrden(nodo->izq);
-        std::cout << nodo->elemento << " ";
-        _enOrden(nodo->der);
-    }
-
-    void _preOrden(Nodo<T>* nodo) {
-        if (nodo == nullptr) return;
-        std::cout << nodo->elemento << " ";
-        _preOrden(nodo->izq);
-        _preOrden(nodo->der);
-    }
-
-    void _postOrden(Nodo<T>* nodo) {
-        if (nodo == nullptr) return;
-        _postOrden(nodo->izq);
-        _postOrden(nodo->der);
-        std::cout << nodo->elemento << " ";
-    }
-
-    int _cantidad(Nodo<T>* nodo) {
-        if (nodo == nullptr) return 0;
-        return 1 + _cantidad(nodo->izq) + _cantidad(nodo->der);
-    }
-
-    int _altura(Nodo<T>* nodo) {
-        if (nodo == nullptr) return 0;
-        return 1 + std::max(_altura(nodo->izq), _altura(nodo->der));
-    }
-
-    bool _buscar(Nodo<T>* nodo, const T& e) {
-        if (nodo == nullptr) return false;
-        if (*e < *(nodo->elemento)) return _buscar(nodo->izq, e);
-        if (*e > *(nodo->elemento)) return _buscar(nodo->der, e);
-        return true;
-    }
-
-    void _imprimirArbol(Nodo<T>* nodo, std::string ident, bool last) {
-        if (nodo != nullptr) {
-            std::cout << ident;
-            if (last) {
-                std::cout << "R----";
-                ident += "   ";
-            }
-            else {
-                std::cout << "L----";
-                ident += "|  ";
-            }
-            std::cout << nodo->elemento << std::endl;
-            _imprimirArbol(nodo->izq, ident, false);
-            _imprimirArbol(nodo->der, ident, true);
-        }
-    }
-
-    void _limpiar() {
-        raiz = nullptr; // Establece la raíz del árbol como nula, lo que efectivamente elimina todos los nodos del árbol
-    }
-
-    void _obtenerElementos(Nodo<T>* nodo, std::vector<T>& elementos) {
-        if (nodo == nullptr) return;
-        _obtenerElementos(nodo->izq, elementos);
-        elementos.push_back(nodo->elemento);
-        _obtenerElementos(nodo->der, elementos);
+    friend ostream& operator<<(ostream& os, const Arbol& arbol) {
+        os << "Arbol(Id: " << arbol.Id << ", Especie: " << arbol.Especie << ", Edad: " << arbol.Edad << ")";
+        return os;
     }
 };
 
-#endif
+#endif // ARBOL_H
